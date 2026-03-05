@@ -3,8 +3,7 @@
 import pytest
 
 from swarm.core.registry import AgentRegistry, AgentNotFoundError, DuplicateAgentError
-from swarm.core.runtime import RunContext, SwarmRuntime
-from swarm.core.config import SwarmConfig
+from swarm.core.runtime import SwarmRuntime
 from swarm.agents.base import BaseAgent
 
 

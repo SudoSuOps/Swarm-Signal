@@ -11,7 +11,6 @@ import random
 from pathlib import Path
 from typing import Any
 
-from ..core.config import SwarmConfig
 from ..core.runtime import RunContext
 
 
@@ -33,15 +32,15 @@ class DatasetFactory:
         return pairs
 
     def validate_pair(self, pair: dict[str, Any]) -> bool:
-        """Check a pair meets minimum quality thresholds."""
-        q = pair.get("question", "")
-        a = pair.get("answer", "")
-        length = len(q) + len(a)
+        """Check a pair meets minimum quality thresholds per pair.schema.json."""
+        instruction = pair.get("instruction", "")
+        response = pair.get("response", "")
+        length = len(instruction) + len(response)
         if length < self.config.min_pair_length:
             return False
         if length > self.config.max_pair_length:
             return False
-        score = pair.get("quality_score", 1.0)
+        score = pair.get("score", 1.0)
         if score < self.config.quality_score_threshold:
             return False
         return True

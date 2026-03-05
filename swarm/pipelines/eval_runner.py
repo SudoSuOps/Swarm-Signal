@@ -49,11 +49,11 @@ class EvalRunner:
 
         for pair in pairs:
             if predict_fn:
-                prediction = predict_fn(pair["question"])
+                prediction = predict_fn(pair["instruction"])
             else:
                 prediction = ""
 
-            scores = self.score_pair(prediction, pair.get("answer", ""))
+            scores = self.score_pair(prediction, pair.get("response", ""))
 
             for metric, score in scores.items():
                 results.append({

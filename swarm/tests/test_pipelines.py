@@ -2,7 +2,6 @@
 
 import json
 import pytest
-from pathlib import Path
 
 from swarm.core.runtime import SwarmRuntime
 from swarm.pipelines.dataset_factory import DatasetFactory
@@ -19,7 +18,7 @@ def ctx():
 @pytest.fixture
 def sample_pairs_file(tmp_path):
     pairs = [
-        {"question": f"Question {i} " * 10, "answer": f"Answer {i} " * 30, "specialty": "test", "source": "synthetic"}
+        {"instruction": f"Instruction {i} " * 10, "response": f"Response {i} " * 30, "score": 0.9, "domain": "test"}
         for i in range(100)
     ]
     path = tmp_path / "pairs.jsonl"
@@ -39,13 +38,13 @@ def test_load_pairs(ctx, sample_pairs_file):
 
 def test_validate_pair(ctx):
     factory = DatasetFactory(ctx)
-    good = {"question": "x" * 100, "answer": "y" * 200}
+    good = {"instruction": "x" * 100, "response": "y" * 200, "score": 0.9, "domain": "test"}
     assert factory.validate_pair(good)
 
-    short = {"question": "hi", "answer": "ok"}
+    short = {"instruction": "hi", "response": "ok", "score": 0.9, "domain": "test"}
     assert not factory.validate_pair(short)
 
-    low_quality = {"question": "x" * 100, "answer": "y" * 200, "quality_score": 0.1}
+    low_quality = {"instruction": "x" * 100, "response": "y" * 200, "score": 0.1, "domain": "test"}
     assert not factory.validate_pair(low_quality)
 
 

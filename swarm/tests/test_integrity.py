@@ -1,7 +1,6 @@
 """Integrity tests — verify schema contracts, locked files, and structure."""
 
 import json
-import pytest
 from pathlib import Path
 
 SWARM_ROOT = Path(__file__).resolve().parent.parent
@@ -15,8 +14,10 @@ def test_pair_schema_valid_json():
     assert path.exists(), "pair.schema.json not found"
     schema = json.loads(path.read_text())
     assert schema["type"] == "object"
-    assert "question" in schema["required"]
-    assert "answer" in schema["required"]
+    assert "instruction" in schema["required"]
+    assert "response" in schema["required"]
+    assert "score" in schema["required"]
+    assert "domain" in schema["required"]
 
 
 def test_eval_schema_valid_json():
@@ -69,3 +70,11 @@ def test_pipeline_modules_present():
     pipelines = SWARM_ROOT / "pipelines"
     for module in ["dataset_factory.py", "training_pipeline.py", "eval_runner.py"]:
         assert (pipelines / module).exists(), f"pipelines/{module} missing"
+
+
+def test_agents_registry_pattern():
+    from swarm.agents import AGENTS
+    expected = {"swarmjudge", "swarmcode", "swarmcre", "swarmmed"}
+    assert set(AGENTS.keys()) == expected, f"AGENTS keys mismatch: {set(AGENTS.keys())} != {expected}"
+    for name, cls in AGENTS.items():
+        assert hasattr(cls, "run"), f"Agent {name} ({cls.__name__}) missing 'run' method"

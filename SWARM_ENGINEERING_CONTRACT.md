@@ -1,29 +1,73 @@
 # Swarm Engineering Contract
 
-## System Rules
+You are modifying a production system.
+Your primary goal is stability, not refactoring.
 
-### 1. Repository Architecture is Immutable
+---
 
-The following directories are **READ-ONLY**:
+## Locked Files (READ-ONLY)
 
-- `core/`
-- `contracts/`
-- `tests/`
+```
+core/runtime.py
+core/config.py
+contracts/*
+tests/*
+```
 
-Never modify files in these directories unless explicitly instructed.
+Do NOT modify these files unless explicitly instructed.
 
-### 2. Editable Zones
+## Editable Zones
 
-Editable directories:
+```
+agents/
+pipelines/
+scripts/
+```
 
-- `agents/`
-- `pipelines/`
-- `scripts/`
+---
 
-### 3. Architecture Cannot Be Changed
+## Rules
+
+### 1. Core directory is read-only.
+
+Never touch `core/runtime.py` or `core/config.py`. These define the runtime and config interfaces.
+
+### 2. Contracts directory defines dataset schema.
+
+All pipeline outputs must conform to the schemas in `contracts/`. The canonical dataset schema:
+
+```json
+{
+  "instruction": "string",
+  "response": "string",
+  "score": "float",
+  "domain": "string",
+  "metadata": "object"
+}
+```
+
+### 3. Pipelines must output valid schema.
+
+Every pipeline that produces data must emit records matching `contracts/pair.schema.json`. No exceptions.
+
+### 4. Agents must register in registry.py.
+
+All swarm agents must be registered in the `AGENTS` dictionary:
+
+```python
+AGENTS = {
+    "swarmjudge": SwarmJudgeAgent,
+    "swarmcode": SwarmCodeAgent,
+    "swarmcre": SwarmCREAgent,
+    "swarmmed": SwarmMedAgent,
+}
+```
+
+Agents cannot create new ones randomly. New agents require a registry entry.
+
+### 5. Architecture cannot be changed.
 
 You may **NOT**:
-
 - Rename modules
 - Restructure folders
 - Remove interfaces
@@ -31,37 +75,27 @@ You may **NOT**:
 
 You may **ONLY** implement functionality inside existing modules.
 
-### 4. Validation Required
+### 6. Modification scope: 200 lines max.
 
-Before submitting code you must ensure:
+If more changes are required, propose a plan first.
 
-- Tests pass
-- Code compiles
-- Schema contracts remain valid
-- Existing functions remain backward compatible
-
-### 5. Modification Scope
-
-- Maximum modification scope: **200 lines**
-- If more changes are required, propose a plan first
-
-### 6. Schema Contracts
-
-Dataset outputs must match the schema in:
-
-```
-contracts/pair.schema.json
-```
-
-### 7. Tests Required
-
-Tests go in: `tests/`
-
-Always include tests when adding new functionality.
-
-### 8. Minimal Changes
+### 7. Minimal changes only.
 
 Fix the task with the smallest safe modification. Never refactor unrelated code.
+
+---
+
+## Mandatory Test Gate
+
+Nothing merges unless all three pass:
+
+```
+pytest
+ruff
+mypy
+```
+
+If tests fail, the change is rejected.
 
 ---
 
@@ -71,11 +105,5 @@ Fix the task with the smallest safe modification. Never refactor unrelated code.
 2. Identify the minimal file to modify
 3. Explain the change in a short plan
 4. Implement the change
-
-## Output Format
-
-1. Plan
-2. Files modified
-3. Code changes
-4. Tests added
-5. Confirmation tests pass
+5. Run test gate
+6. Confirm tests pass

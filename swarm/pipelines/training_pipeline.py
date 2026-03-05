@@ -44,7 +44,7 @@ class TrainingPipeline:
         if run.learning_rate <= 0 or run.learning_rate > 1e-2:
             issues.append(f"learning_rate={run.learning_rate} out of range (0, 1e-2]")
         if run.batch_size < 1:
-            issues.append(f"batch_size must be >= 1")
+            issues.append("batch_size must be >= 1")
         return issues
 
     def build_command(self, run: TrainingRun) -> list[str]:
