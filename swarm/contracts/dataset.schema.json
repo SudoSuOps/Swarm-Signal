@@ -16,7 +16,7 @@
     },
     "vertical": {
       "type": "string",
-      "enum": ["cre", "medical", "aviation", "signal", "core"],
+      "enum": ["cre", "aviation", "signal", "core"],
       "description": "Primary vertical."
     },
     "pair_count": {

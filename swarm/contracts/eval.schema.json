@@ -29,7 +29,7 @@
     },
     "vertical": {
       "type": "string",
-      "enum": ["cre", "medical", "aviation", "signal", "core"],
+      "enum": ["cre", "aviation", "signal", "core"],
       "description": "Vertical being evaluated."
     },
     "timestamp": {

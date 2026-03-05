@@ -30,7 +30,6 @@ All agents must be registered in the `AGENTS` dictionary:
 AGENTS = {
     "swarmcode": SwarmCodeAgent,     # Code generation and review
     "swarmcre": SwarmCREAgent,       # Commercial real estate intelligence
-    "swarmmed": SwarmMedAgent,       # Medical/pharma intelligence
 }
 ```
 

@@ -37,8 +37,8 @@ def test_valid_pair_with_metadata():
         "instruction": "What is a DDI interaction?",
         "response": "A drug-drug interaction occurs when " + "x" * 50,
         "score": 0.9,
-        "domain": "medical",
-        "metadata": {"source": "cook_v2", "specialty": "pharma"},
+        "domain": "cre",
+        "metadata": {"source": "cook_v2", "specialty": "industrial"},
     }
     assert is_valid_pair(pair)
 
