@@ -61,7 +61,7 @@ def test_core_modules_present():
 
 def test_agent_modules_present():
     agents = SWARM_ROOT / "agents"
-    for agent in ["swarmjudge", "swarmcode", "swarmcre", "swarmmed"]:
+    for agent in ["swarmcode", "swarmcre", "swarmmed"]:
         init = agents / agent / "__init__.py"
         assert init.exists(), f"agents/{agent}/__init__.py missing"
 
@@ -74,7 +74,7 @@ def test_pipeline_modules_present():
 
 def test_agents_registry_pattern():
     from swarm.agents import AGENTS
-    expected = {"swarmjudge", "swarmcode", "swarmcre", "swarmmed"}
+    expected = {"swarmcode", "swarmcre", "swarmmed"}
     assert set(AGENTS.keys()) == expected, f"AGENTS keys mismatch: {set(AGENTS.keys())} != {expected}"
     for name, cls in AGENTS.items():
         assert hasattr(cls, "run"), f"Agent {name} ({cls.__name__}) missing 'run' method"

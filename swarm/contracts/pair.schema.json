@@ -19,7 +19,7 @@
       "type": "number",
       "minimum": 0.0,
       "maximum": 1.0,
-      "description": "Quality score from judge or CoVe pipeline."
+      "description": "Quality score from eval or CoVe pipeline."
     },
     "domain": {
       "type": "string",
@@ -28,7 +28,7 @@
     },
     "metadata": {
       "type": "object",
-      "description": "Additional metadata (judge verdict, trajectory step, specialty, format, source, etc.)."
+      "description": "Additional metadata (verdict, trajectory step, specialty, format, source, etc.)."
     }
   },
   "additionalProperties": false

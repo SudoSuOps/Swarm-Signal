@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Swarm Evaluation Result",
-  "description": "Schema for evaluation results from judge or eval pipeline.",
+  "description": "Schema for evaluation results from eval pipeline.",
   "type": "object",
   "required": ["run_id", "model", "metric", "score"],
   "properties": {
@@ -11,7 +11,7 @@
     },
     "model": {
       "type": "string",
-      "description": "Model identifier (e.g. SwarmSignal-9B-P2, SwarmJudge-9B-B0)."
+      "description": "Model identifier (e.g. SwarmSignal-9B-P2, SwarmCRE-35B-v1)."
     },
     "metric": {
       "type": "string",

@@ -38,7 +38,7 @@ def test_valid_pair_with_metadata():
         "response": "A drug-drug interaction occurs when " + "x" * 50,
         "score": 0.9,
         "domain": "medical",
-        "metadata": {"judge": "swarmjudge-9b", "verdict": "PASS"},
+        "metadata": {"source": "cook_v2", "specialty": "pharma"},
     }
     assert is_valid_pair(pair)
 

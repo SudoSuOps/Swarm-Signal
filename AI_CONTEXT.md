@@ -8,7 +8,7 @@ Read this before writing any code.
 ## System Goals
 
 - Build autonomous AI intelligence infrastructure — not a model lab, an AI refinery
-- Four-layer stack: Signal > Judge+Curate > Verticals > Ledger
+- Four-layer stack: Signal > Curate > Verticals > Ledger
 - Every model earns its slot. No bloat. Signal first.
 - Primary goal is **stability**, not refactoring
 
@@ -28,7 +28,6 @@ All agents must be registered in the `AGENTS` dictionary:
 ```python
 # swarm/agents/__init__.py
 AGENTS = {
-    "swarmjudge": SwarmJudgeAgent,   # Quality gate — scores pairs PASS/FAIL
     "swarmcode": SwarmCodeAgent,     # Code generation and review
     "swarmcre": SwarmCREAgent,       # Commercial real estate intelligence
     "swarmmed": SwarmMedAgent,       # Medical/pharma intelligence
@@ -52,7 +51,7 @@ All pipeline outputs must conform to `contracts/pair.schema.json`:
 ```
 
 Required fields: `instruction`, `response`, `score`, `domain`.
-Optional: `metadata` (judge verdict, trajectory step, specialty, format, source).
+Optional: `metadata` (trajectory step, specialty, format, source).
 
 ## Repository Structure
 
