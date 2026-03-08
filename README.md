@@ -26,7 +26,35 @@ Six output formats, each with a distinct editorial voice:
 
 ## Quick Start
 
-### Run with llama-server (recommended)
+### Run with vLLM (recommended — continuous batching, native Blackwell)
+
+```bash
+# Serve the merged bf16 model via vLLM
+CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=0 \
+python3 -m vllm.entrypoints.openai.api_server \
+  --model /path/to/swarmsignal-9b/merged/ \
+  --port 8090 --dtype bfloat16 --max-model-len 4096 \
+  --gpu-memory-utilization 0.95 --served-model-name swarmsignal-9b \
+  --limit-mm-per-prompt '{"image": 0}' \
+  --skip-mm-profiling --enforce-eager
+
+# Generate a briefing
+curl http://localhost:8090/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "swarmsignal-9b",
+    "messages": [
+      {"role": "system", "content": "You are SwarmSignal, an AI market intelligence analyst and writer for Swarm & Bee."},
+      {"role": "user", "content": "BRIEFING: Cover today'\''s top AI stories."}
+    ],
+    "max_tokens": 2048,
+    "temperature": 0.7
+  }'
+```
+
+> **Note**: Qwen3.5 merged models need a `vision_config` fix for vLLM. See [docs/VLLM_DEPLOYMENT.md](docs/VLLM_DEPLOYMENT.md) and [swarm-vllm](https://github.com/SudoSuOps/swarm-vllm) for the one-time fix script.
+
+### Run with llama-server (alternative — single request, GGUF)
 
 ```bash
 # Serve the Q4_K_M GGUF
@@ -74,7 +102,8 @@ Swarm-Signal/
 │   ├── serve.sh                 # Launch llama-server
 │   └── daily_pipeline.sh        # Cron-ready daily signal pipeline
 ├── docs/
-│   └── MODEL_CARD.md            # Full model card with training details
+│   ├── MODEL_CARD.md            # Full model card with training details
+│   └── VLLM_DEPLOYMENT.md       # vLLM 0.17.0 compute upgrade — benchmarks, config fix
 └── README.md
 ```
 
@@ -168,6 +197,17 @@ trl>=0.24.0           # training only
 datasets>=4.0.0       # training only
 torch>=2.0.0          # training only
 ```
+
+## Compute Infrastructure
+
+The Swarm dataset factory runs on sovereign hardware — no cloud, no outsourced labeling.
+
+| GPU | Model Served | Throughput | Precision |
+|-----|-------------|------------|-----------|
+| RTX 3090 Ti (24GB) | SwarmCurator-9B | 165 tok/s (4 concurrent) | bf16 |
+| RTX PRO 6000 Blackwell (96GB) | SwarmCurator-27B | 88 tok/s (4 concurrent) | bf16 |
+
+**vLLM 0.17.0** with continuous batching, native Blackwell SM120 kernels. ~1,740 pairs/hour combined. See [docs/VLLM_DEPLOYMENT.md](docs/VLLM_DEPLOYMENT.md) for the full deployment guide and [swarm-vllm](https://github.com/SudoSuOps/swarm-vllm) for launch scripts and config tools.
 
 ## Links
 
